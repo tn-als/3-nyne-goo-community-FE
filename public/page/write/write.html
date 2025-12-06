@@ -42,7 +42,13 @@
                     <!-- 이미지 -->
                     <div class="form-group">
                         <label for="images">이미지 (최대 3장)</label>
-                        <input type="file" id="images" name="images" accept=".jpg, .jpeg, .png" multiple>
+
+                        <label for="images" class="custom-upload-btn" id="uploadBtn">
+                        <span class="upload-icon">📷</span>
+                        <span>이미지 선택</span>
+                        </label>
+
+                        <input type="file" id="images" name="images" accept=".jpg, .jpeg, .png" multiple hidden>
                         <div class="file-list"></div>
                     </div>
 

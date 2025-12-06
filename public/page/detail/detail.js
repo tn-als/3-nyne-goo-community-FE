@@ -54,7 +54,7 @@ const getDetail = async () => {
         // 제목, 유저프로필, 유저이름
         document.getElementById("postTitle").textContent = post.title;
         document.querySelector("#profile").src = toAbsUrl(post.author.image.imagePath);
-        document.getElementById("postAuthorName").textContent = post.author.nickname;
+        document.getElementById("postAuthorName").textContent = post.author.name;
 
         // 수정날짜 있으면 수정날짜 보여줌
         const date = document.getElementById("postDate");

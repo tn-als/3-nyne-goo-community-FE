@@ -109,6 +109,8 @@ const editPost = async (postId) => {
                 deleteFile(Number(id));
             }
         });
+
+        updateUploadButtonState();
     } catch (error) {
         showToast("게시글 데이터를 불러오는 중 오류가 발생했습니다.");
     }
@@ -203,14 +205,24 @@ const addFile = () => {
                 `
                     <div id="file${fileNo}" class="filebox">
                         <p class="name"> ${file.name}</p>
-                        <button type="button" class="delete-btn" onclick="deleteFile(${fileNo++})">삭제</button>
+                        <button type="button" class="delete-btn" id="${fileNo}">삭제</button>
                     </div>
                     `;
 
             fileListDiv.insertAdjacentHTML("beforeend", fileHtml);
+            fileNo++;
         }
         // 입력한 값 초기화 -> 동일한 파일 재선택 가능
         e.target.value = "";
+
+        fileListDiv.addEventListener("click", (e) => {
+            if (e.target.classList.contains("delete-btn")) {
+                const id = e.target.id;
+                deleteFile(Number(id));
+            }
+        });
+
+        updateUploadButtonState();
     });
 }
 
@@ -226,6 +238,20 @@ const fileValidation = (file) => {
     return true;
 }
 
+const updateUploadButtonState = () => {
+    const uploadBtn = document.getElementById("uploadBtn");
+    const maxCount = 3;
+
+    if (fileArr.length >= maxCount) {
+        uploadBtn.classList.add("disabled");
+        uploadBtn.style.pointerEvents = "none";   // 클릭 방지
+    } else {
+        uploadBtn.classList.remove("disabled");
+        uploadBtn.style.pointerEvents = "auto";
+    }
+};
+
+
 // 파일 삭제
 const deleteFile = (deleteNum) => {
     // 삭제하려는 파일의 id을 fileArr에서 찾음
@@ -237,6 +263,8 @@ const deleteFile = (deleteNum) => {
     // 배열에서 삭제
     fileArr.splice(index, 1);
     document.getElementById(`file${deleteNum}`).remove();
+
+    updateUploadButtonState();
 }
 
 // 제목, 내용 모두 유효하면 완료버튼 활성화
