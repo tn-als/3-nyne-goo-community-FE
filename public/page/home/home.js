@@ -10,6 +10,15 @@ let isFetching = false;
 let hasMore = true;
 
 document.addEventListener("DOMContentLoaded", async () => {
+    window.addEventListener("pageshow", (event) => {
+        const needRefresh = sessionStorage.getItem("refreshHome");
+
+        if (needRefresh) {
+            sessionStorage.removeItem("refreshHome");
+            location.reload();
+        }
+    })
+
     const isFirstVisit = window.sessionStorage.getItem("firstVisited");
 
     try {
@@ -25,12 +34,12 @@ document.addEventListener("DOMContentLoaded", async () => {
         window.sessionStorage.setItem("userInfo", JSON.stringify(userProfile));
 
         if (isFirstVisit) {
-        // 홈에 처음 진입했을 때만 사용자 정보 요청
-        // 로그인 성공 시 사용자 정보 요청
-        const toastMessage = `${userResponse.data.nickname}님, 환영합니다!`;
-        showToast(toastMessage);
-        window.sessionStorage.removeItem("firstVisited");
-    }
+            // 홈에 처음 진입했을 때만 사용자 정보 요청
+            // 로그인 성공 시 사용자 정보 요청
+            const toastMessage = `${userResponse.data.nickname}님, 환영합니다!`;
+            showToast(toastMessage);
+            window.sessionStorage.removeItem("firstVisited");
+        }
     }
     catch (e) {
         console.error(e);
@@ -127,6 +136,7 @@ const getList = async () => {
         if (postListResponse.last) hasMore = false;
         else hasMore = true;
     } catch (error) {
+        console.log(error);
         showToast("게시글을 불러오는 중 오류가 발생했습니다.");
     } finally {
         isFetching = false;
@@ -225,6 +235,7 @@ const renderPosts = (postListResponse) => {
     else {
         hasMore = true;
 
+        const postsDiv = document.querySelectorAll(".post");
         const lastIndex = postsDiv.length - 2; // 마지막에서 두 번째
         if (lastIndex > 0) onScroll(postsDiv[lastIndex]);
     }
