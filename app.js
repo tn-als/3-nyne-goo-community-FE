@@ -25,7 +25,7 @@ app.get('/doran', (req,res)=>{
 });
 
 // 클라이언트에서 http 요청 메소드 중 get을 이용해서 host:port로 요청 보내면 실행되는 라우트
-app.get('/login', (req, res) => {
+app.get(['/', '/login'], (req, res) => {
     res.sendFile(__dirname + "/public/page/login/login.html")
 })
 
