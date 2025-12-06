@@ -24,6 +24,8 @@ export function loadLayout(location) {
             const backButton = header.querySelector("#backBtn")
             const menu = header.querySelector("#userProfile")
 
+            clickLogout();
+
             switch (location) {
                 case "my":
                     const dropdown = header.querySelector("#dropdownMenu");
@@ -67,6 +69,22 @@ const setProfile = () => {
     clickProfile();
 }
 
+const clickLogout = () => {
+    document.getElementById("logoutBtn").addEventListener("click", async () => {
+        try {
+            await apiRequest("/auth", { method: "DELETE" });
+
+            // 클라이언트 저장소 정리
+            sessionStorage.clear();
+            localStorage.clear();
+
+            window.location.replace("/login");
+        } catch (error) {
+            showToast("로그아웃 중 오류가 발생했습니다. 다시 시도해주세요.");
+        }
+    });
+}
+
 const clickProfile = () => {
     document.getElementById("userProfile").addEventListener("click", ()=>{
         window.location.href="/my";
@@ -83,20 +101,5 @@ const clickMenu = (header, e, dropdown) => {
 
     header.querySelector("#editPw").addEventListener("click", () => {
         window.location.href = "/my/edit-password";
-    });
-    header.querySelector("#logout").addEventListener("click", async () => {
-        console.log("click logout");
-        try {
-            console.log("logout request");
-            await apiRequest("/auth", { method: "DELETE" });
-
-            // 클라이언트 저장소 정리
-            sessionStorage.clear();
-            localStorage.clear();
-
-            window.location.replace("/login");
-        } catch (error) {
-            showToast("로그아웃 중 오류가 발생했습니다. 다시 시도해주세요.");
-        }
     });
 }
