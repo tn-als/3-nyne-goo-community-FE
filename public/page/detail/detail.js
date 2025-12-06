@@ -149,7 +149,7 @@ const showDeleteDialog = (commentId) => {
 const getComments = async () => {
     try {
         const commentsResponse = await apiRequest(
-            `/posts/${postId}/comments?page=${currentPage}&size=${size}&sort=createdAt,DESC`,
+            `/posts/${postId}/comments?page=${currentPage}&size=${size}&sort=createdAt,ASC`,
             { method: "GET" }
         );
 
@@ -263,7 +263,7 @@ const getObserver = () => {
             entries.forEach(entry => {
                 if (!entry.isIntersecting) return;
 
-                if (!isFetching && hasMore) getList();
+                if (!isFetching && hasMore) getComments();
                 io.unobserve(entry.target); // 한번 감지 후 해제
             });
         })
@@ -354,7 +354,7 @@ const saveEditedComment = async (commentId, commentDiv) => {
 
         // 수정된 내용이 comment-content에 들어감
         commentDiv.querySelector(".comment-content").textContent = content;
-        commentDiv.querySelector(".date").textContent = response.data.updatedAt.replace("T", " ").split(".")[0] || "";;
+        commentDiv.querySelector(".date").textContent = `${response.data.updatedAt.replace("T", " ").split(".")[0] || ""} (수정)`;
         // 수정창, 완료&취소 버튼 숨기고 수정&삭제 버튼이 보이도록
         cancelEdit(commentDiv);
         showToast("댓글이 수정되었습니다.");
