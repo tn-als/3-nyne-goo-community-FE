@@ -60,7 +60,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 // 인기 게시글 가져오기
 const loadPopularPosts = async () => {
     try {
-        const data = await apiRequest(`/posts?page=0&size=5&sort=likesCount,DESC&sort=createdAt,ASC`);
+        const data = await apiRequest(`/posts?page=0&size=5&sort=likesCount,DESC&sort=createdAt,DESC`);
         renderPopularPosts(data.data.content.slice(0, 3));
     } catch (err) {
         console.error(err);
